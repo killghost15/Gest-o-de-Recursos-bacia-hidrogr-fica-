@@ -22,11 +22,16 @@ public class Entity extends Agent{
 	protected void takeDown() {
 		
 	}
+	public int getWater_necessity(){
+		return water_taking;
+	}
 	public class Management_water extends CyclicBehaviour{
 
 		@Override
 		public void action() {
 			// TODO Auto-generated method stub
+			
+
 			
 		}
 		
