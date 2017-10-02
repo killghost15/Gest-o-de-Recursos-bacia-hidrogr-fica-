@@ -14,5 +14,5 @@ O sistema multi-agente a implementar deve regular o uso da água pelas entidades
 
 ## Material
 JADE, Repast+SAJaS
-Karl Mason, Patrick Mannion, Jim Duggan and Edna Howley (2016). [Applying Multi-Agent Reinforcement Learning to Watershed Management] (https://www.researchgate.net/publication/299416955_Applying_Multi-Agent_Reinforcement_Learning_to_Watershed_Management).
+Karl Mason, Patrick Mannion, Jim Duggan and Edna Howley (2016). [Applying Multi-Agent Reinforcement Learning to Watershed Management](https://www.researchgate.net/publication/299416955_Applying_Multi-Agent_Reinforcement_Learning_to_Watershed_Management).
 [Francesco Amigoni, Andrea Castelletti and Matteo Giuliani (2015), Modeling the Management of Water Resources Systems Using Multi-Objective DCOPs, Proceedings of the 2015 International Conference on Autonomous Agents and Multiagent Systems, Istanbul, Turkey](http://dl.acm.org/citation.cfm?id=2773258)
