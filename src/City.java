@@ -7,7 +7,7 @@ import jade.lang.acl.ACLMessage;
 public class City extends Agent{
 	private AID id;
 	private String name;
-	private float a1,b1,c1,min,x1; //x1 is water withdrawn for the city
+	private float min,x1; //x1 is water withdrawn for the city
 	protected void setup(){
 		
 		Object[] args = getArguments();
@@ -50,8 +50,6 @@ public class City extends Agent{
 		
 		
 	}
-	public float fobjective(float x1){
-		return a1*x1*x1+b1*x1+c1;
-	}
+	
 
 }
