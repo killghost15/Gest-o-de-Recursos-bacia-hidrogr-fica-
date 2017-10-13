@@ -32,6 +32,7 @@ public class City extends Agent{
 	}
 	
 	public class City_Management_water extends CyclicBehaviour{
+		private String state="start";
 
 		@Override
 		public void action() {
@@ -44,6 +45,26 @@ public class City extends Agent{
 			msg.setOntology("Value sharing");
 			msg.setContent(""+x1);
 			send(msg);
+			ACLMessage answer = myAgent.receive();
+			if (answer != null) {
+				if(state.equals("start")){
+					
+				if(answer.getContent().equals("1")){
+					state="start";
+					x1+=0.1;
+				}
+				else{
+					state="stop";
+				}
+				}
+				else{
+					
+				}
+			}
+			else{
+				block();
+			}
+			
 
 			
 		}
