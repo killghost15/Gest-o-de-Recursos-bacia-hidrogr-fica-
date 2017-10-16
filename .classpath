@@ -2,6 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/JP/Desktop/Aulas/4ºano/1ºsemestre/AIAD/proj/Gest-o-de-Recursos-bacia-hidrogr-fica-/lib/jade.jar"/>
+	<classpathentry kind="lib" path="lib/jade.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Gestão%20de%20Recursos/lib/jade/doc/jade_doc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
