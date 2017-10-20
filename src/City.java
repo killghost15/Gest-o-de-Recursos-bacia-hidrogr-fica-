@@ -1,5 +1,6 @@
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -7,26 +8,30 @@ import jade.lang.acl.ACLMessage;
 public class City extends Agent{
 	private AID id;
 	private String name;
+	private int loop_counter=0;
 	private float Q1,minC,minD,x1,a1,b1,c1; //minC is water withdrawn for the city,minD is minimum water for dam, a,b,c are constants of the problem
 	protected void setup(){
 		
 		Object[] args = getArguments();
 		 if (args != null && args.length > 0){
-			 name=(String)args[0];
-			 id = new AID("City"+name, AID.ISLOCALNAME);
+			// System.out.println(args.length);
+			 
+			 id = new AID("City", AID.ISLOCALNAME);
 			 
 			 
-			 minC=(float)args[1];
-			 x1=minC;
-			 minD=(float)args[2];
-			 a1=(float)args[3];
-			 b1=(float)args[4];
-			 c1=(float)args[5];
-			 Q1=(float)args[6];
+			 minC=Float.parseFloat((String) args[0]);
+			 
+			 x1=0;
+			 minD=Float.parseFloat((String)args[1]);
+			 a1=Float.parseFloat((String)args[2]);
+			 b1=Float.parseFloat((String)args[3]);
+			 c1=Float.parseFloat((String)args[4]);
+			 Q1=Float.parseFloat((String)args[5]);
 			 
 			
 			 //n está operacional ainda, só em conceito
 			 addBehaviour(new City_Management_water());
+			 
 		 }
 		 else{
 			 doDelete();
@@ -37,9 +42,11 @@ public class City extends Agent{
 		
 	}
 	
-	public class City_Management_water extends CyclicBehaviour{
-		private String state="start";
-
+	public class City_Management_water extends Behaviour{
+		private String state="send";
+		private int loop_counter=0;
+		private float best_x=x1;
+		private float best_objective=fobjectivecity();
 		@Override
 		public void action() {
 			// TODO Auto-generated method stub
@@ -50,35 +57,44 @@ public class City extends Agent{
 			-
 			SUM j=1 até X=N de C(|hj + 1|lj )*/
 			
+			if(state.equals("send")){
+				System.out.println("a enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Dam", AID.ISLOCALNAME));
 			msg.setLanguage("English");
 			msg.setOntology("Value sharing");
 			msg.setContent(""+x1+" "+fobjectivecity()+" "+fpenalty());
 			send(msg);
-			ACLMessage answer = myAgent.receive();
+			state="receive";
+			}
+			if(state.equals("receive")){
+			ACLMessage answer = receive();
 			//on reception from Eco2 should restart and increment x1
 			if (answer != null) {
-				if(state.equals("start")){
-					
-				if(answer.getContent().equals("1")){
-					state="start";
-					x1+=0.1;
-				}
-				else{
-					state="stop";
-				}
-				}
-				else{
-					
-				}
+				loop_counter++;
+				x1+=0.1;
+				state="send";
+				
+				/*answer.getContent()
+			
+				if()*/
 			}
 			else{
+				System.out.println("à espera de receber");
 				block();
 			}
 			
 
-			
+			}
+		}
+
+		@Override
+		public boolean done() {
+			if(loop_counter==100){
+			System.out.println("terminou melhor solução x1:"+best_x+"solução obejctivo:"+best_objective);
+			return loop_counter==100;
+			}
+			else return false;
 		}
 		
 		
@@ -94,10 +110,10 @@ public class City extends Agent{
 		}
 		else{
 			if(minC-x1>0){
-				res=1000*minC-x1;
+				res=1000*(minC-x1+1);
 			}
 			if(minD-Q1+x1>0){
-				res+=100*(minD-Q1+x1);
+				res+=1000*(minD-Q1+x1+1);
 			}
 			return res;
 		}

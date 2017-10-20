@@ -12,13 +12,13 @@ public class Dam extends Agent{
 		
 		Object[] args = getArguments();
 		 if (args != null && args.length > 0){
-			 name=(String)args[0];
-			 id = new AID("Dam"+name, AID.ISLOCALNAME);
+			 
+			 id = new AID("Dam", AID.ISLOCALNAME);
 			 
 			 
-			a2=(float)args[1];
-			b2=(float)args[2];
-			c2=(float)args[3];
+			a2=Float.parseFloat((String)args[0]);
+			b2=Float.parseFloat((String)args[1]);
+			c2=Float.parseFloat((String)args[2]);
 			
 			x2=0;
 			 
@@ -28,7 +28,7 @@ public class Dam extends Agent{
 		 }
 		 else{
 			 doDelete();
-			 System.out.println("usage City <name><min water necessary>");
+			 System.out.println("usage Dam <name><min water necessary>");
 		 }
 	}
 	protected void takeDown() {
@@ -36,24 +36,24 @@ public class Dam extends Agent{
 	}
 	
 	public class Dam_Management_water extends CyclicBehaviour{
-		private String state="start";
-
+		private String state="receive";
 		@Override
 		public void action() {
 			
 			
-			ACLMessage answer = myAgent.receive();
+			ACLMessage answer = receive();
 			if (answer != null) {
-				
+				System.out.println(answer.getContent());
 				x1=Float.parseFloat(answer.getContent().split(" ")[0]);
 				sumob=Float.parseFloat(answer.getContent().split(" ")[1]);
 				sumpen=Float.parseFloat(answer.getContent().split(" ")[2]);
+				state="send";
 			}
 			else{
 				block();
 			}
-			
-			
+			if(state.equals("send")){
+			System.out.println("enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Farm", AID.ISLOCALNAME));
 			msg.setLanguage("English");
@@ -61,8 +61,8 @@ public class Dam extends Agent{
 			msg.setContent(""+x2+" "+(fobjectiveDam()+sumob)+" "+(fpenalty()+sumpen));
 			send(msg);
 			
-			
-
+			state="receive";
+			}
 			
 		}
 		
@@ -80,7 +80,7 @@ public class Dam extends Agent{
 		else{
 			
 			
-			res+=1000*(x2-S-Q1+x1);
+			res+=1000*(x2-S-Q1+x1+1);
 			return res;
 		}
 		
