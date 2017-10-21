@@ -64,7 +64,7 @@ public class Dam extends Agent{
 			}
 			
 			if(state.equals("send")){
-				/*
+				
 			//System.out.println("enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Farm2", AID.ISLOCALNAME));
@@ -72,7 +72,7 @@ public class Dam extends Agent{
 			msg.setOntology("Value sharing");
 			msg.setContent(""+x2);
 			send(msg);
-			
+			/*
 			ACLMessage msg2 = new ACLMessage(ACLMessage.INFORM);
 			msg2.addReceiver(new AID("Eco2", AID.ISLOCALNAME));
 			msg2.setLanguage("English");
