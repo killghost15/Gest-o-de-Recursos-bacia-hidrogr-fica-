@@ -38,6 +38,7 @@ public class Farm1 extends Agent{
 		@Override
 		public void action() {
 			
+			if(state.equals("receive")){
 			ACLMessage answer = receive();
 			if (answer != null) {
 				if(Float.parseFloat(answer.getContent())>reward){
@@ -50,8 +51,9 @@ public class Farm1 extends Agent{
 			else{
 				block();
 			}
+			}
 			if(state.equals("send")){
-				/*
+				
 			System.out.println("enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Eco1", AID.ISLOCALNAME));
@@ -62,12 +64,11 @@ public class Farm1 extends Agent{
 			
 			state="receive";
 			}
-			*/
+			
 		}
 			
 
 			
-		}
 		
 		
 	}

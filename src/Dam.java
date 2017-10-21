@@ -19,7 +19,7 @@ public class Dam extends Agent{
 			a2=Float.parseFloat((String)args[0]);
 			b2=Float.parseFloat((String)args[1]);
 			c2=Float.parseFloat((String)args[2]);
-			S=c2=Float.parseFloat((String)args[3]);
+			S=Float.parseFloat((String)args[3]);
 			
 			x2=0;
 			 
@@ -77,7 +77,7 @@ public class Dam extends Agent{
 			msg2.addReceiver(new AID("Eco2", AID.ISLOCALNAME));
 			msg2.setLanguage("English");
 			msg2.setOntology("Value sharing");
-			msg2.setContent(""+x2+" "+(fobjectiveDam()+sumob)+" "+(fpenalty()+sumpen));
+			msg2.setContent(""+x2+" "+(fobjective()+sumob)+" "+(fpenalty()+sumpen));
 			send(msg2);
 			*/
 			
@@ -89,7 +89,7 @@ public class Dam extends Agent{
 		
 	}
 	
-	public float fobjectiveDam(){
+	public float fobjective(){
 		return a2*x2*x2+b2*x2+c2;
 	}
 	public float fpenalty(){

@@ -7,7 +7,7 @@ import jade.lang.acl.ACLMessage;
 
 public class City extends Agent{
 	private AID id;
-	private String name;
+	
 	private int loop_counter=0;
 	private float Q1,minC,minD,x1,a1,b1,c1; //minC is water withdrawn for the city,minD is minimum water for dam, a,b,c are constants of the problem
 	protected void setup(){
@@ -29,7 +29,7 @@ public class City extends Agent{
 			 Q1=Float.parseFloat((String)args[5]);
 			 
 			
-			 //n está operacional ainda, só em conceito
+			 
 			 addBehaviour(new City_Management_water());
 			 
 		 }
