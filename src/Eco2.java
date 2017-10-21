@@ -5,27 +5,25 @@ import jade.lang.acl.ACLMessage;
 
 
 
-public class Farm2 extends Agent{
-	private AID id;
+public class Eco2 extends Agent{
+private AID id;
 	
-	private float minM,x3,minF2,x6,x2,a6,b6,c6,sumob,sumpen; //x1 is water withdrawn for the city
+	private float minM,x6,x2,x5,x3,a5,b5,c5,sumob,sumpen,sumob2,sumpen2; //x1 is water withdrawn for the city
 	protected void setup(){
 		
 		Object[] args = getArguments();
 		 if (args != null && args.length > 0){
 			 
 			id = new AID("Dam", AID.ISLOCALNAME);
-			x6=0;
-			minF2=Float.parseFloat((String)args[0]);
-			minM=Float.parseFloat((String)args[1]);
-			a6=Float.parseFloat((String)args[0]);
-			b6=Float.parseFloat((String)args[1]);
-			c6=Float.parseFloat((String)args[2]);
+			
+			a5=Float.parseFloat((String)args[0]);
+			b5=Float.parseFloat((String)args[1]);
+			c5=Float.parseFloat((String)args[2]);
 			
 			 
 			
 			 //n está operacional ainda, só em conceito
-			 addBehaviour(new Farm2_Management_water());
+			 addBehaviour(new Eco2_Management_water());
 		 }
 		 else{
 			 doDelete();
@@ -36,7 +34,7 @@ public class Farm2 extends Agent{
 		
 	}
 	
-	public class Farm2_Management_water extends CyclicBehaviour{
+	public class Eco2_Management_water extends CyclicBehaviour{
 		private String state="receive1";
 		private float reward=0;
 		private float best_x=0;
@@ -50,7 +48,8 @@ public class Farm2 extends Agent{
 				
 				//parsing the information that comes from farm1
 				x2=Float.parseFloat(answer.getContent().split(" ")[0]);
-				
+				sumob=Float.parseFloat(answer.getContent().split(" ")[1]);
+				sumpen=Float.parseFloat(answer.getContent().split(" ")[2]);
 				state="receive2";
 			}
 			else{
@@ -65,15 +64,11 @@ public class Farm2 extends Agent{
 					System.out.println(answer2.getContent());
 					
 					//parsing the information that comes from farm1
-					x3=Float.parseFloat(answer2.getContent().split(" ")[0]);
-					sumob=Float.parseFloat(answer2.getContent().split(" ")[1]);
-					sumpen=Float.parseFloat(answer2.getContent().split(" ")[2]);
+					x6=Float.parseFloat(answer2.getContent().split(" ")[0]);
+					x3=Float.parseFloat(answer2.getContent().split(" ")[1]);
+					sumob2=Float.parseFloat(answer2.getContent().split(" ")[2]);
+					sumpen2=Float.parseFloat(answer2.getContent().split(" ")[3]);
 					//x3 is dependent on other variables:
-					if(Float.parseFloat(answer2.getContent().split(" ")[3])>reward){
-						reward=Float.parseFloat(answer2.getContent().split(" ")[3]);
-						best_x=x6;
-						x6++;
-					}
 					state="send";
 				}
 				else{
@@ -82,13 +77,13 @@ public class Farm2 extends Agent{
 				
 			}
 			if(state.equals("send")){
-				
+				x5=x2+x3-x6;
 			//System.out.println("enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-			msg.addReceiver(new AID("Eco2", AID.ISLOCALNAME));
+			msg.addReceiver(new AID("City", AID.ISLOCALNAME));
 			msg.setLanguage("English");
 			msg.setOntology("Value sharing");
-			msg.setContent(""+x6+" "+x3+" "+(fobjective()+sumob)+" "+(fpenalty()+sumpen));
+			msg.setContent(""+RewardFunction());
 			send(msg);
 			
 			
@@ -101,23 +96,29 @@ public class Farm2 extends Agent{
 		
 		
 	}
+	public float RewardFunction(){
+		return (sumob+sumob2+fobjective())-(sumpen+sumpen2+fpenalty());
+		
+		
+	}
 	
 	public float fobjective(){
-		return a6*x6*x6+b6*x6+c6;
+		return a5*x5*x5+b5*x5+c5;
 	}
 	public float fpenalty(){
 		float res=0;
-		if(minF2-x6 <=0 && minM-x2-x3+x6<=0){
+		if((minM-x5)<=0){
 			return res;
 		}
 		else{
-			if(minF2-x6>0){
-				res=1000*(minF2-x6+1);
-			}
-			if(minM-x2-x3+x6>0){
-				res+=1000*(minM-x2-x3+x6+1);
-			}
+			
+			
+			res+=1000*(minM-x5+1);
 			return res;
 		}
-		}
+		
+	
+	}
+	
+
 }
