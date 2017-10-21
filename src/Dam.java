@@ -19,6 +19,7 @@ public class Dam extends Agent{
 			a2=Float.parseFloat((String)args[0]);
 			b2=Float.parseFloat((String)args[1]);
 			c2=Float.parseFloat((String)args[2]);
+			S=c2=Float.parseFloat((String)args[3]);
 			
 			x2=0;
 			 
@@ -37,6 +38,8 @@ public class Dam extends Agent{
 	
 	public class Dam_Management_water extends CyclicBehaviour{
 		private String state="receive";
+		private float reward=0;
+		private float best_x=0;
 		@Override
 		public void action() {
 			
@@ -45,21 +48,38 @@ public class Dam extends Agent{
 			if (answer != null) {
 				System.out.println(answer.getContent());
 				x1=Float.parseFloat(answer.getContent().split(" ")[0]);
-				sumob=Float.parseFloat(answer.getContent().split(" ")[1]);
-				sumpen=Float.parseFloat(answer.getContent().split(" ")[2]);
+				Q1=Float.parseFloat(answer.getContent().split(" ")[1]);
+				sumob=Float.parseFloat(answer.getContent().split(" ")[2]);
+				sumpen=Float.parseFloat(answer.getContent().split(" ")[3]);
+				
+				if(Float.parseFloat(answer.getContent().split(" ")[3])>reward){
+					reward=Float.parseFloat(answer.getContent().split(" ")[4]);
+					best_x=x2;
+					x2++;
+				}
 				state="send";
 			}
 			else{
 				block();
 			}
+			
 			if(state.equals("send")){
-			System.out.println("enviar");
+				/*
+			//System.out.println("enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-			msg.addReceiver(new AID("Farm", AID.ISLOCALNAME));
+			msg.addReceiver(new AID("Farm2", AID.ISLOCALNAME));
 			msg.setLanguage("English");
 			msg.setOntology("Value sharing");
-			msg.setContent(""+x2+" "+(fobjectiveDam()+sumob)+" "+(fpenalty()+sumpen));
+			msg.setContent(""+x2);
 			send(msg);
+			
+			ACLMessage msg2 = new ACLMessage(ACLMessage.INFORM);
+			msg2.addReceiver(new AID("Eco2", AID.ISLOCALNAME));
+			msg2.setLanguage("English");
+			msg2.setOntology("Value sharing");
+			msg2.setContent(""+x2+" "+(fobjectiveDam()+sumob)+" "+(fpenalty()+sumpen));
+			send(msg2);
+			*/
 			
 			state="receive";
 			}

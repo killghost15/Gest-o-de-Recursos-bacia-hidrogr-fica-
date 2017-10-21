@@ -46,9 +46,10 @@ public class City extends Agent{
 		private String state="send";
 		private int loop_counter=0;
 		private float best_x=x1;
-		private float best_objective=fobjectivecity();
+		private float reward=0;
 		@Override
 		public void action() {
+			
 			// TODO Auto-generated method stub
 			// envia-a o 
 			//sending x1 and F so it is possible to continue shared problem and calculate the Reward from sum of penalty function and sum of fobjectives
@@ -57,41 +58,62 @@ public class City extends Agent{
 			-
 			SUM j=1 até X=N de C(|hj + 1|lj )*/
 			
+			
+			if(state.equals("receive")){
+				ACLMessage answer = receive();
+				//on reception from Eco2 should restart and increment x1
+				if (answer != null) {
+					
+					loop_counter++;
+					if(Float.parseFloat(answer.getContent())>reward){
+						best_x=x1;
+						reward=Float.parseFloat(answer.getContent());
+					}
+					x1++;
+					
+					state="send";
+					
+					/*answer.getContent()
+				
+					if()*/
+				}
+				else{
+					System.out.println("à espera de receber");
+					block();
+				}
+				
+
+				}
+
+			
+			
 			if(state.equals("send")){
 				System.out.println("a enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Dam", AID.ISLOCALNAME));
 			msg.setLanguage("English");
 			msg.setOntology("Value sharing");
-			msg.setContent(""+x1+" "+fobjectivecity()+" "+fpenalty());
+			msg.setContent(x1+" "+Q1+" "+fobjective()+" "+fpenalty()+" "+reward);
 			send(msg);
+			
+			ACLMessage msg2 = new ACLMessage(ACLMessage.INFORM);
+			msg2.addReceiver(new AID("Farm1", AID.ISLOCALNAME));
+			msg2.setLanguage("English");
+			msg2.setOntology("Value sharing");
+			msg2.setContent(reward+"");
+			send(msg2);
+			
+			
+			
+			
 			state="receive";
 			}
-			if(state.equals("receive")){
-			ACLMessage answer = receive();
-			//on reception from Eco2 should restart and increment x1
-			if (answer != null) {
-				loop_counter++;
-				x1+=0.1;
-				state="send";
-				
-				/*answer.getContent()
-			
-				if()*/
-			}
-			else{
-				System.out.println("à espera de receber");
-				block();
-			}
-			
-
-			}
-		}
+					}
 
 		@Override
 		public boolean done() {
 			if(loop_counter==100){
-			System.out.println("terminou melhor solução x1:"+best_x+"solução obejctivo:"+best_objective);
+			System.out.println("terminou melhor solução x1:"+best_x+"solução obejctivo:");
 			return loop_counter==100;
 			}
 			else return false;
@@ -100,7 +122,7 @@ public class City extends Agent{
 		
 	}
 	
-	public float fobjectivecity(){
+	public float fobjective(){
 		return a1*x1*x1+b1*x1+c1;
 	}
 	public float fpenalty(){
