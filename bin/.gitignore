@@ -1,2 +1,15 @@
-/Entity.class
-/Entity$Management_water.class
+/CLI.class
+/City$City_Management_water.class
+/City.class
+/Dam$Dam_Management_water.class
+/Dam.class
+/Eco1$Eco_Management_water.class
+/Eco1.class
+/Eco2$Eco2_Management_water.class
+/Eco2.class
+/Farm1$Farm_Management_water.class
+/Farm1.class
+/Farm2$Farm2_Management_water.class
+/Farm2.class
+/GUI/
+/agents/
