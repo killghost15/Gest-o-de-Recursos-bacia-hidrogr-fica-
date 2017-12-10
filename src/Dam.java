@@ -1,5 +1,6 @@
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -36,63 +37,83 @@ public class Dam extends Agent{
 		
 	}
 	
-	public class Dam_Management_water extends CyclicBehaviour{
+	public class Dam_Management_water extends Behaviour{
 		private String state="receive";
+		private float first_x=x2;
+		private float second_x=x2;
 		private float reward=0;
+		private int loop_counter=1;
 		private float best_x=0;
 		@Override
 		public void action() {
 			
-			
+			if(state.equals("receive")){
 			ACLMessage answer = receive();
+
 			if (answer != null) {
-				System.out.println(answer.getContent());
-				x1=Float.parseFloat(answer.getContent().split(" ")[0]);
-				Q1=Float.parseFloat(answer.getContent().split(" ")[1]);
-				sumob=Float.parseFloat(answer.getContent().split(" ")[2]);
-				sumpen=Float.parseFloat(answer.getContent().split(" ")[3]);
-				
+				String variables=answer.getContent();
+				//System.out.println(variables);
+				x1=Float.parseFloat(variables.split(" ")[0]);
+				Q1=Float.parseFloat(variables.split(" ")[1]);
+				sumob=Float.parseFloat(variables.split(" ")[2]);
+				sumpen=Float.parseFloat(variables.split(" ")[3]);
 				if(Float.parseFloat(answer.getContent().split(" ")[3])>reward){
 					reward=Float.parseFloat(answer.getContent().split(" ")[4]);
 					best_x=x2;
-					x2++;
+					
 				}
+				
 				state="send";
 			}
 			else{
 				block();
 			}
-			
+			}
 			if(state.equals("send")){
 				
-			//System.out.println("enviar");
+			//System.out.println("enviarDam");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Farm2", AID.ISLOCALNAME));
 			msg.setLanguage("English");
 			msg.setOntology("Value sharing");
 			msg.setContent(""+x2);
 			send(msg);
-			/*
+			
+			//synch ou wait para garantir A receção correta
+			
 			ACLMessage msg2 = new ACLMessage(ACLMessage.INFORM);
 			msg2.addReceiver(new AID("Eco2", AID.ISLOCALNAME));
 			msg2.setLanguage("English");
 			msg2.setOntology("Value sharing");
-			msg2.setContent(""+x2+" "+(fobjective()+sumob)+" "+(fpenalty()+sumpen));
+			msg2.setContent(""+x2+" "+(fobjective(x2)+sumob)+" "+(fpenalty(x2)+sumpen));
 			send(msg2);
-			*/
 			
+			
+			if((fobjective(second_x)-fpenalty(second_x))>=(fobjective(first_x)-fpenalty(first_x)))
+			{
+				first_x=x2;
+				x2++;
+				second_x=x2;
+			}
+			loop_counter++;
 			state="receive";
 			}
 			
 		}
 		
-		
+		public boolean done() {
+			if(loop_counter==100){
+			System.out.println("terminou melhor solução x2:"+best_x+"solução obejctivo:");
+			return loop_counter==100;
+			}
+			else return false;
+		}
 	}
 	
-	public float fobjective(){
+	public float fobjective(float x2){
 		return a2*x2*x2+b2*x2+c2;
 	}
-	public float fpenalty(){
+	public float fpenalty(float x2){
 		float res=0;
 		if((x2-S-Q1 + x1)<=0){
 			return res;

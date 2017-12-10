@@ -1,5 +1,6 @@
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -35,17 +36,18 @@ public class Eco1 extends Agent{
 		
 	}
 	
-	public class Eco_Management_water extends CyclicBehaviour{
+	public class Eco_Management_water extends Behaviour{
 		private String state="receive";
 		private float reward=0;
 		private float best_x=0;
+		private int loop_counter=1;
 		@Override
 		public void action() {
 			
-			
+			if(state.equals("receive")){
 			ACLMessage answer = receive();
 			if (answer != null) {
-				System.out.println(answer.getContent());
+				//System.out.println(answer.getContent());
 				
 				//parsing the information that comes from farm1
 				x4=Float.parseFloat(answer.getContent().split(" ")[0]);
@@ -64,10 +66,10 @@ public class Eco1 extends Agent{
 			else{
 				block();
 			}
-			
+			}
 			if(state.equals("send")){
 				
-			//System.out.println("enviar");
+			//System.out.println("enviarEco1");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Farm2", AID.ISLOCALNAME));
 			msg.setLanguage("English");
@@ -77,10 +79,17 @@ public class Eco1 extends Agent{
 			
 			
 			
-			
+			loop_counter++;
 			state="receive";
 			}
 			
+		}
+		public boolean done() {
+			if(loop_counter==100){
+			System.out.println("terminou melhor solução x3:"+best_x+"solução obejctivo:");
+			return loop_counter==100;
+			}
+			else return false;
 		}
 		
 		

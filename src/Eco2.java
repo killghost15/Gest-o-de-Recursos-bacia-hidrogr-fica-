@@ -1,5 +1,6 @@
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -34,17 +35,18 @@ private AID id;
 		
 	}
 	
-	public class Eco2_Management_water extends CyclicBehaviour{
+	public class Eco2_Management_water extends Behaviour{
 		private String state="receive1";
 		private float reward=0;
 		private float best_x=0;
+		private int loop_counter=1;
 		@Override
 		public void action() {
 			
 			if(state.equals("receive1")){
 			ACLMessage answer = receive();
 			if (answer != null) {
-				System.out.println(answer.getContent());
+				//System.out.println(answer.getContent());
 				
 				//parsing the information that comes from farm1
 				x2=Float.parseFloat(answer.getContent().split(" ")[0]);
@@ -61,7 +63,7 @@ private AID id;
 			if(state.equals("receive2")){ 
 				ACLMessage answer2 = receive();
 				if (answer2 != null) {
-					System.out.println(answer2.getContent());
+					//System.out.println(answer2.getContent());
 					
 					//parsing the information that comes from farm1
 					x6=Float.parseFloat(answer2.getContent().split(" ")[0]);
@@ -77,7 +79,10 @@ private AID id;
 				
 			}
 			if(state.equals("send")){
+				float prevreward=RewardFunction();
 				x5=x2+x3-x6;
+				if(RewardFunction()>prevreward)
+					best_x=x5;
 			//System.out.println("enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("City", AID.ISLOCALNAME));
@@ -88,10 +93,17 @@ private AID id;
 			
 			
 			
-			
+			loop_counter++;
 			state="receive1";
 			}
 			
+		}
+		public boolean done() {
+			if(loop_counter==100){
+			System.out.println("terminou melhor solução x5:"+best_x+"solução obejctivo:");
+			return loop_counter==100;
+			}
+			else return false;
 		}
 		
 		

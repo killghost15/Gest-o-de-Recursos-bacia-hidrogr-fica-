@@ -44,7 +44,9 @@ public class City extends Agent{
 	
 	public class City_Management_water extends Behaviour{
 		private String state="send";
-		private int loop_counter=0;
+		private float first_x=0;
+		private float second_x=0;
+		private int loop_counter=1;
 		private float best_x=x1;
 		private float reward=0;
 		@Override
@@ -64,12 +66,20 @@ public class City extends Agent{
 				//on reception from Eco2 should restart and increment x1
 				if (answer != null) {
 					
+					
 					loop_counter++;
 					if(Float.parseFloat(answer.getContent())>reward){
 						best_x=x1;
 						reward=Float.parseFloat(answer.getContent());
+						
 					}
-					x1++;
+					
+					if((fobjective(second_x)-fpenalty(second_x))>=(fobjective(first_x)-fpenalty(first_x)))
+						{
+						first_x=x1;
+						x1++;
+						second_x=x1;
+						}
 					
 					state="send";
 					
@@ -78,7 +88,7 @@ public class City extends Agent{
 					if()*/
 				}
 				else{
-					System.out.println("à espera de receber");
+					//System.out.println("à espera de receber");
 					block();
 				}
 				
@@ -88,12 +98,12 @@ public class City extends Agent{
 			
 			
 			if(state.equals("send")){
-				System.out.println("a enviar");
+				//System.out.println("a enviar");
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID("Dam", AID.ISLOCALNAME));
 			msg.setLanguage("English");
 			msg.setOntology("Value sharing");
-			msg.setContent(x1+" "+Q1+" "+fobjective()+" "+fpenalty()+" "+reward);
+			msg.setContent(x1+" "+Q1+" "+fobjective(x1)+" "+fpenalty(x1)+" "+reward);
 			send(msg);
 			
 			ACLMessage msg2 = new ACLMessage(ACLMessage.INFORM);
@@ -122,10 +132,10 @@ public class City extends Agent{
 		
 	}
 	
-	public float fobjective(){
+	public float fobjective(float x1){
 		return a1*x1*x1+b1*x1+c1;
 	}
-	public float fpenalty(){
+	public float fpenalty(float x1){
 		float res=0;
 		if(minC-x1 <=0 && minD-Q1+x1<=0){
 			return res;
