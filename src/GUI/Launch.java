@@ -11,6 +11,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import agents.City;
+import agents.Dam;
+import agents.Eco1;
+import agents.Eco2;
+import agents.Farm1;
+import agents.Farm2;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -66,15 +71,18 @@ public class Launch extends JFrame {
 		 */
 		b.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				String[] city = {"12","10","-0.2","6","-5","80"};
-				String[] dam = {"-0.06","2.52","0","10"};
-				String[] eco1 = {"-0.29","6.38","-3"};
-				String[] eco2 = {"-0.055","3.63","-23"};
-				String[] farm1 = {"8","6","-0.13","5.98","-6","35"};
-				String[] farm2 = {"15","10","-0.15","7.5","-15"};
+				Object[] city = {"12","10","-0.2","6","-5","80"};
+				Object[] dam = {"-0.06","2.52","0","10"};
+				Object[] eco1 = {"-0.29","6.38","-3"};
+				Object[] eco2 = {"-0.055","3.63","-23"};
+				Object[] farm1 = {"8","6","-0.13","5.98","-6","35"};
+				Object[] farm2 = {"15","10","-0.15","7.5","-15"};
 				try {
 					launchAgents(city,dam,eco1,eco2,farm1,farm2);
 				} catch (StaleProxyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -83,15 +91,18 @@ public class Launch extends JFrame {
 		
 		b1.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				String[] city = {"12","10","-0.2","6","-5","40"};
-				String[] dam = {"-0.06","2.52","0","8"};
-				String[] eco1 = {"-0.29","6.38","-3"};
-				String[] eco2 = {"-0.055","3.63","-23"};
-				String[] farm1 = {"8","6","-0.13","5.98","-6","20"};
-				String[] farm2 = {"15","10","-0.15","7.5","-15"};
+				Object[] city = {"12","10","-0.2","6","-5","40"};
+				Object[] dam = {"-0.06","2.52","0","8"};
+				Object[] eco1 = {"-0.29","6.38","-3"};
+				Object[] eco2 = {"-0.055","3.63","-23"};
+				Object[] farm1 = {"8","6","-0.13","5.98","-6","20"};
+				Object[] farm2 = {"15","10","-0.15","7.5","-15"};
 				try {
 					launchAgents(city,dam,eco1,eco2,farm1,farm2);
 				} catch (StaleProxyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -100,15 +111,18 @@ public class Launch extends JFrame {
 		
 		b2.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				String[] city = {"12","10","-0.2","6","-5","15"};
-				String[] dam = {"-0.06","2.52","0","3"};
-				String[] eco1 = {"-0.29","6.38","-3"};
-				String[] eco2 = {"-0.055","3.63","-23"};
-				String[] farm1 = {"8","6","-0.13","5.98","-6","8"};
-				String[] farm2 = {"15","10","-0.15","7.5","-15"};
+				Object[] city = {"12","10","-0.2","6","-5","15"};
+				Object[] dam = {"-0.06","2.52","0","3"};
+				Object[] eco1 = {"-0.29","6.38","-3"};
+				Object[] eco2 = {"-0.055","3.63","-23"};
+				Object[] farm1 = {"8","6","-0.13","5.98","-6","8"};
+				Object[] farm2 = {"15","10","-0.15","7.5","-15"};
 				try {
 					launchAgents(city,dam,eco1,eco2,farm1,farm2);
 				} catch (StaleProxyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -141,13 +155,13 @@ public class Launch extends JFrame {
 		ac = rt.createAgentContainer(p);
 	}
 	
-	void launchAgents(String[] city, String[] dam, String[] eco1, String[] eco2, String[] farm1, String[] farm2) throws StaleProxyException {
+	void launchAgents(Object[] city, Object[] dam, Object[] eco1, Object[] eco2, Object[] farm1, Object[] farm2) throws StaleProxyException, InterruptedException {
 		
-		AgentController damController = ac.createNewAgent("Dam",City.class.getName(), dam);
-		AgentController eco1Controller = ac.createNewAgent("Eco1",City.class.getName(), eco1);
-		AgentController eco2Controller = ac.createNewAgent("Eco2",City.class.getName(), eco2);
-		AgentController farm1Controller = ac.createNewAgent("Farm1",City.class.getName(), farm1);
-		AgentController farm2Controller = ac.createNewAgent("Farm2",City.class.getName(), farm2);
+		AgentController damController = ac.createNewAgent("Dam",Dam.class.getName(), dam);
+		AgentController eco1Controller = ac.createNewAgent("Eco1",Eco1.class.getName(), eco1);
+		AgentController eco2Controller = ac.createNewAgent("Eco2",Eco2.class.getName(), eco2);
+		AgentController farm1Controller = ac.createNewAgent("Farm1",Farm1.class.getName(), farm1);
+		AgentController farm2Controller = ac.createNewAgent("Farm2",Farm2.class.getName(), farm2);
 		AgentController cityController = ac.createNewAgent("City",City.class.getName(), city);
 
 		
@@ -158,6 +172,15 @@ public class Launch extends JFrame {
 		farm2Controller.start();
 		cityController.start();
 		
+		Thread.sleep(5000);
+		
+		damController.kill();
+		eco1Controller.kill();
+		eco2Controller.kill();
+		farm1Controller.kill();
+		farm2Controller.kill();
+		cityController.kill();
+
 	}
 
 }
