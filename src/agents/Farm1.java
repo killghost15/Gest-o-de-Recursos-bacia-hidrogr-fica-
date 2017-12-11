@@ -1,4 +1,5 @@
 package agents;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -47,6 +48,10 @@ public class Farm1 extends Agent{
 			if(state.equals("receive")){
 			ACLMessage answer = receive();
 			if (answer != null) {
+				if(loop_counter==2){
+					best_x=x4;
+					reward=Float.parseFloat(answer.getContent());
+				}
 				if(Float.parseFloat(answer.getContent())>reward){
 				best_x=x4;
 				reward=Float.parseFloat(answer.getContent());
@@ -72,7 +77,7 @@ public class Farm1 extends Agent{
 			if((fobjective(second_x)-fpenalty(second_x))>=(fobjective(first_x)-fpenalty(first_x)))
 			{
 				first_x=x4;
-				x4++;
+				x4+=0.1;
 				second_x=x4;
 			}
 			loop_counter++;
@@ -81,9 +86,9 @@ public class Farm1 extends Agent{
 			
 		}
 		public boolean done() {
-			if(loop_counter==100){
+			if(loop_counter==10000){
 			System.out.println("terminou melhor solução x4:"+best_x+"solução obejctivo:");
-			return loop_counter==100;
+			return true;
 			}
 			else return false;
 		}

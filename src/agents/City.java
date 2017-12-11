@@ -1,4 +1,5 @@
 package agents;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -68,17 +69,24 @@ public class City extends Agent{
 				if (answer != null) {
 					
 					
-					loop_counter++;
+					
+					if(loop_counter==1){
+						best_x=x1;
+						reward=Float.parseFloat(answer.getContent());
+					}
+						
+						loop_counter++;
+					//System.out.println("reward atual:"+reward+" reward nova:"+Float.parseFloat(answer.getContent()));
 					if(Float.parseFloat(answer.getContent())>reward){
 						best_x=x1;
 						reward=Float.parseFloat(answer.getContent());
-						
+						//System.out.println("atualizei o melhor x");
 					}
 					
 					if((fobjective(second_x)-fpenalty(second_x))>=(fobjective(first_x)-fpenalty(first_x)))
 						{
 						first_x=x1;
-						x1++;
+						x1+=0.1;
 						second_x=x1;
 						}
 					
@@ -123,9 +131,9 @@ public class City extends Agent{
 
 		@Override
 		public boolean done() {
-			if(loop_counter==100){
+			if(loop_counter==10000){
 			System.out.println("terminou melhor solução x1:"+best_x+"solução obejctivo:");
-			return loop_counter==100;
+			return true;
 			}
 			else return false;
 		}

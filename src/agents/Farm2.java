@@ -1,4 +1,5 @@
 package agents;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -51,11 +52,12 @@ public class Farm2 extends Agent{
 			if(state.equals("receive1")){
 			ACLMessage answer = receive();
 			if (answer != null) {
-				//System.out.println(answer.getContent());
-				
-				//parsing the information that comes from farm1
-				x2=Float.parseFloat(answer.getContent().split(" ")[0]);
-				
+				if(answer.getContent().split(" ").length==1){
+				receiveDam(answer);
+				}
+				if(answer.getContent().split(" ").length==4){
+					receiveEco1(answer);
+				}
 				state="receive2";
 			}
 			else{
@@ -67,18 +69,12 @@ public class Farm2 extends Agent{
 			if(state.equals("receive2")){ 
 				ACLMessage answer2 = receive();
 				if (answer2 != null) {
-					//System.out.println(answer2.getContent());
-					//System.out.println("loop:"+loop_counter);
-					//parsing the information that comes from farm1
-					x3=Float.parseFloat(answer2.getContent().split(" ")[0]);
-					sumob=Float.parseFloat(answer2.getContent().split(" ")[1]);
-					sumpen=Float.parseFloat(answer2.getContent().split(" ")[2]);
-					//x3 is dependent on other variables:
-					if(Float.parseFloat(answer2.getContent().split(" ")[3])>reward){
-						reward=Float.parseFloat(answer2.getContent().split(" ")[3]);
-						best_x=x6;
-						
-					}
+					if(answer2.getContent().split(" ").length==1){
+						receiveDam(answer2);
+						}
+						if(answer2.getContent().split(" ").length==4){
+							receiveEco1(answer2);
+						}
 					state="send";
 				}
 				else{
@@ -101,7 +97,7 @@ public class Farm2 extends Agent{
 			if((fobjective(second_x)-fpenalty(second_x))>=(fobjective(first_x)-fpenalty(first_x)))
 			{
 				first_x=x6;
-				x6++;
+				x6+=0.1;
 				second_x=x6;
 			}
 			loop_counter++;
@@ -110,11 +106,37 @@ public class Farm2 extends Agent{
 			
 		}
 		public boolean done() {
-			if(loop_counter==100){
+			if(loop_counter==10000){
 			System.out.println("terminou melhor solução x6:"+best_x+"solução obejctivo:");
-			return loop_counter==100;
+			return true;
 			}
 			else return false;
+		}
+		public void receiveEco1(ACLMessage answer2){
+			//System.out.println("receberEco1:"+answer2.getContent());
+			//System.out.println("loop:"+loop_counter);
+			//parsing the information that comes from farm1
+			x3=Float.parseFloat(answer2.getContent().split(" ")[0]);
+			sumob=Float.parseFloat(answer2.getContent().split(" ")[1]);
+			sumpen=Float.parseFloat(answer2.getContent().split(" ")[2]);
+			//x3 is dependent on other variables:
+			if(loop_counter==2){
+				reward=Float.parseFloat(answer2.getContent().split(" ")[3]);
+				best_x=x6;
+			}
+			if(Float.parseFloat(answer2.getContent().split(" ")[3])>reward){
+				reward=Float.parseFloat(answer2.getContent().split(" ")[3]);
+				best_x=x6;
+				
+			}
+			
+		}
+		public void receiveDam(ACLMessage answer){
+			//System.out.println(answer.getContent());
+			
+			//parsing the information that comes from farm1
+			x2=Float.parseFloat(answer.getContent().split(" ")[0]);
+			
 		}
 		
 		

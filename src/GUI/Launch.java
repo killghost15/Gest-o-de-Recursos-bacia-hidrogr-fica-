@@ -66,12 +66,12 @@ public class Launch extends JFrame {
 		 */
 		b.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				String[] city = {"arg0","arg1","arg2","arg3","arg4","arg5"};
-				String[] dam = {"arg0","arg1","arg2","arg3"};
-				String[] eco1 = {"arg0","arg1","arg2"};
-				String[] eco2 = {"arg0","arg1","arg2"};
-				String[] farm1 = {"arg0","arg1","arg2","arg3","arg4","arg5"};
-				String[] farm2 = {"arg0","arg1","arg2"};
+				String[] city = {"12","10","-0.2","6","-5","80"};
+				String[] dam = {"-0.06","2.52","0","10"};
+				String[] eco1 = {"-0.29","6.38","-3"};
+				String[] eco2 = {"-0.055","3.63","-23"};
+				String[] farm1 = {"8","6","-0.13","5.98","-6","35"};
+				String[] farm2 = {"15","10","-0.15","7.5","-15"};
 				try {
 					launchAgents(city,dam,eco1,eco2,farm1,farm2);
 				} catch (StaleProxyException e1) {
@@ -83,12 +83,12 @@ public class Launch extends JFrame {
 		
 		b1.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				String[] city = {"arg0","arg1","arg2","arg3","arg4","arg5"};
-				String[] dam = {"arg0","arg1","arg2","arg3"};
-				String[] eco1 = {"arg0","arg1","arg2"};
-				String[] eco2 = {"arg0","arg1","arg2"};
-				String[] farm1 = {"arg0","arg1","arg2","arg3","arg4","arg5"};
-				String[] farm2 = {"arg0","arg1","arg2"};
+				String[] city = {"12","10","-0.2","6","-5","40"};
+				String[] dam = {"-0.06","2.52","0","8"};
+				String[] eco1 = {"-0.29","6.38","-3"};
+				String[] eco2 = {"-0.055","3.63","-23"};
+				String[] farm1 = {"8","6","-0.13","5.98","-6","20"};
+				String[] farm2 = {"15","10","-0.15","7.5","-15"};
 				try {
 					launchAgents(city,dam,eco1,eco2,farm1,farm2);
 				} catch (StaleProxyException e1) {
@@ -100,12 +100,12 @@ public class Launch extends JFrame {
 		
 		b2.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				String[] city = {"arg0","arg1","arg2","arg3","arg4","arg5"};
-				String[] dam = {"arg0","arg1","arg2","arg3"};
-				String[] eco1 = {"arg0","arg1","arg2"};
-				String[] eco2 = {"arg0","arg1","arg2"};
-				String[] farm1 = {"arg0","arg1","arg2","arg3","arg4","arg5"};
-				String[] farm2 = {"arg0","arg1","arg2"};
+				String[] city = {"12","10","-0.2","6","-5","15"};
+				String[] dam = {"-0.06","2.52","0","3"};
+				String[] eco1 = {"-0.29","6.38","-3"};
+				String[] eco2 = {"-0.055","3.63","-23"};
+				String[] farm1 = {"8","6","-0.13","5.98","-6","8"};
+				String[] farm2 = {"15","10","-0.15","7.5","-15"};
 				try {
 					launchAgents(city,dam,eco1,eco2,farm1,farm2);
 				} catch (StaleProxyException e1) {
@@ -142,19 +142,21 @@ public class Launch extends JFrame {
 	}
 	
 	void launchAgents(String[] city, String[] dam, String[] eco1, String[] eco2, String[] farm1, String[] farm2) throws StaleProxyException {
-		AgentController cityController = ac.createNewAgent("City",City.class.getName(), city);
+		
 		AgentController damController = ac.createNewAgent("Dam",City.class.getName(), dam);
 		AgentController eco1Controller = ac.createNewAgent("Eco1",City.class.getName(), eco1);
 		AgentController eco2Controller = ac.createNewAgent("Eco2",City.class.getName(), eco2);
 		AgentController farm1Controller = ac.createNewAgent("Farm1",City.class.getName(), farm1);
 		AgentController farm2Controller = ac.createNewAgent("Farm2",City.class.getName(), farm2);
+		AgentController cityController = ac.createNewAgent("City",City.class.getName(), city);
 
-		cityController.start();
+		
 		damController.start();
 		eco1Controller.start();
 		eco2Controller.start();
 		farm1Controller.start();
 		farm2Controller.start();
+		cityController.start();
 		
 	}
 

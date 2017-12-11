@@ -1,4 +1,5 @@
 package agents;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -58,6 +59,11 @@ public class Eco1 extends Agent{
 				sumpen=Float.parseFloat(answer.getContent().split(" ")[4]);
 				//x3 is dependent on other variables:
 				x3=Q2-x4;
+				if(loop_counter==2){
+					reward=Float.parseFloat(answer.getContent().split(" ")[5]);
+					best_x=x3;
+				}
+				
 				if(Float.parseFloat(answer.getContent().split(" ")[5])>reward){
 					reward=Float.parseFloat(answer.getContent().split(" ")[5]);
 					best_x=x3;
@@ -86,9 +92,9 @@ public class Eco1 extends Agent{
 			
 		}
 		public boolean done() {
-			if(loop_counter==100){
+			if(loop_counter==10000){
 			System.out.println("terminou melhor solução x3:"+best_x+"solução obejctivo:");
-			return loop_counter==100;
+			return true;
 			}
 			else return false;
 		}

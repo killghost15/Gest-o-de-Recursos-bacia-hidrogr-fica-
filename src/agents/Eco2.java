@@ -1,4 +1,5 @@
 package agents;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -47,13 +48,11 @@ private AID id;
 			if(state.equals("receive1")){
 			ACLMessage answer = receive();
 			if (answer != null) {
-				//System.out.println(answer.getContent());
-				
-				//parsing the information that comes from farm1
-				x2=Float.parseFloat(answer.getContent().split(" ")[0]);
-				sumob=Float.parseFloat(answer.getContent().split(" ")[1]);
-				sumpen=Float.parseFloat(answer.getContent().split(" ")[2]);
-				state="receive2";
+				if(answer.getContent().split(" ").length==4)
+					receiveFarm2(answer);
+					if(answer.getContent().split(" ").length==3)
+						receiveDam(answer);
+					state="receive2";
 			}
 			else{
 				block();
@@ -64,13 +63,10 @@ private AID id;
 			if(state.equals("receive2")){ 
 				ACLMessage answer2 = receive();
 				if (answer2 != null) {
-					//System.out.println(answer2.getContent());
-					
-					//parsing the information that comes from farm1
-					x6=Float.parseFloat(answer2.getContent().split(" ")[0]);
-					x3=Float.parseFloat(answer2.getContent().split(" ")[1]);
-					sumob2=Float.parseFloat(answer2.getContent().split(" ")[2]);
-					sumpen2=Float.parseFloat(answer2.getContent().split(" ")[3]);
+					if(answer2.getContent().split(" ").length==4)
+					receiveFarm2(answer2);
+					if(answer2.getContent().split(" ").length==3)
+						receiveDam(answer2);
 					//x3 is dependent on other variables:
 					state="send";
 				}
@@ -99,10 +95,32 @@ private AID id;
 			}
 			
 		}
+		public void receiveDam(ACLMessage answer){
+			//System.out.println(answer.getContent());
+			
+			//parsing the information that comes from farm1
+			x2=Float.parseFloat(answer.getContent().split(" ")[0]);
+			sumob=Float.parseFloat(answer.getContent().split(" ")[1]);
+			sumpen=Float.parseFloat(answer.getContent().split(" ")[2]);
+			
+			
+		}
+		public void receiveFarm2(ACLMessage answer2){
+			//System.out.println(answer2.getContent());
+			
+			//parsing the information that comes from farm1
+			x6=Float.parseFloat(answer2.getContent().split(" ")[0]);
+			x3=Float.parseFloat(answer2.getContent().split(" ")[1]);
+			sumob2=Float.parseFloat(answer2.getContent().split(" ")[2]);
+			sumpen2=Float.parseFloat(answer2.getContent().split(" ")[3]);
+			
+		}
+		
+		
 		public boolean done() {
-			if(loop_counter==100){
+			if(loop_counter==10000){
 			System.out.println("terminou melhor solução x5:"+best_x+"solução obejctivo:");
-			return loop_counter==100;
+			return true;
 			}
 			else return false;
 		}

@@ -1,4 +1,5 @@
 package agents;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -58,6 +59,10 @@ public class Dam extends Agent{
 				Q1=Float.parseFloat(variables.split(" ")[1]);
 				sumob=Float.parseFloat(variables.split(" ")[2]);
 				sumpen=Float.parseFloat(variables.split(" ")[3]);
+				if(loop_counter==2){
+					reward=Float.parseFloat(answer.getContent().split(" ")[4]);
+					best_x=x2;
+				}
 				if(Float.parseFloat(answer.getContent().split(" ")[3])>reward){
 					reward=Float.parseFloat(answer.getContent().split(" ")[4]);
 					best_x=x2;
@@ -93,7 +98,7 @@ public class Dam extends Agent{
 			if((fobjective(second_x)-fpenalty(second_x))>=(fobjective(first_x)-fpenalty(first_x)))
 			{
 				first_x=x2;
-				x2++;
+				x2+=0.1;
 				second_x=x2;
 			}
 			loop_counter++;
@@ -103,9 +108,9 @@ public class Dam extends Agent{
 		}
 		
 		public boolean done() {
-			if(loop_counter==100){
+			if(loop_counter==10000){
 			System.out.println("terminou melhor solução x2:"+best_x+"solução obejctivo:");
-			return loop_counter==100;
+			return true;
 			}
 			else return false;
 		}
